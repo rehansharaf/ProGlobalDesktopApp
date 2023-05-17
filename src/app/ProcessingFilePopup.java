@@ -271,6 +271,9 @@ public class ProcessingFilePopup extends javax.swing.JDialog {
 	    	}else if(serviceType.equals("bulkEmail")){
 	    		String filename = dbquery.getDetailsBulkEmail(serviceType);
 		    	jTextPane1.setText(filename);
+	    	}else if(serviceType.equals("Conexem_CandRPosting")) {
+	    		String filename = dbquery.getDetailsConexemCandRPosting(serviceType);
+		    	jTextPane1.setText(filename);
 	    	}
 	
 	    	

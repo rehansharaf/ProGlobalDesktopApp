@@ -1,17 +1,12 @@
 package app;
 
-import java.awt.Component;
-import java.lang.reflect.InvocationTargetException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 public class DBQueries extends javax.swing.JDialog {
 
@@ -49,10 +44,11 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int injuredWorkerCount = rs1.getInt("count");
 
-		if (injuredWorkerCount == 0)
+		if (injuredWorkerCount == 0) {
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select FileID, TotalADJs, Filename from SkypeCDRBackLog.EAS_File where Status is null ;";
@@ -75,6 +71,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -92,11 +90,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int injuredWorkerCount = rs1.getInt("count");
 
-		if (injuredWorkerCount == 0)
+		if (injuredWorkerCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'CandR' ;";
@@ -119,6 +118,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -181,11 +182,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int conexemCount = rs1.getInt("count");
 
-		if (conexemCount == 0)
+		if (conexemCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, Filename, count from SkypeCDRBackLog.conexemdoc_list_dataFetch "
@@ -209,6 +211,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -220,8 +224,41 @@ public class DBQueries extends javax.swing.JDialog {
 	}
 
 	private void dbConnection() {
-
+		
+	  try {	
+		mySQL = "jdbc:mysql://" + dbhost + ":3306/SkypeCDRBackLog?autoReconnect=true&useSSL=false";
+		Class.forName(dbClassName);
+		myCon = DriverManager.getConnection(mySQL,dbuser,dbpass);
+	  }catch(Exception sqe) {
+		  
+		  ErrorFrame erFrame = new ErrorFrame("Error: Establishing Connection with Database");
+		  erFrame.setVisible(true);
+		  sqe.printStackTrace();
+	  }
+		
+		
+		/*mySQL = "jdbc:mysql://" + dbhost + ":3306/SkypeCDRBackLog?autoReconnect=true&useSSL=false";
 		try {
+			myCon = DriverManager.getConnection(mySQL, dbuser, dbpass);
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+
+		   
+		try {
+			Class.forName(dbClassName);
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			myCon = DriverManager.getConnection(mySQL,myUName,myPswd);
+		} catch (SQLException e1) {
+			ErrorFrame erFrame = new ErrorFrame("Error: Establishing Connection with Database");
+			erFrame.setVisible(true);
+			e1.printStackTrace();
+		}*/
+
+		/*try {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select * From SkypeCDRBackLog.mergepdf2 limit 1 ;";
@@ -247,7 +284,7 @@ public class DBQueries extends javax.swing.JDialog {
 				e.printStackTrace();
 			}
 
-		}
+		}*/
 
 	}
 
@@ -263,11 +300,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int fetchHearingCount = rs1.getInt("count");
 
-		if (fetchHearingCount == 0)
+		if (fetchHearingCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, RequestFilename, ADJCounts from SkypeCDRBackLog.fetchhearingdata where Status is null ;";
@@ -290,6 +328,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -307,11 +347,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int fetchHearingCount = rs1.getInt("count");
 
-		if (fetchHearingCount == 0)
+		if (fetchHearingCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, Filename,Total from SkypeCDRBackLog.Docucent_Requests where Status is null ;";
@@ -334,6 +375,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -351,11 +394,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int mergeCount = rs1.getInt("count");
 
-		if (mergeCount == 0)
+		if (mergeCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select count(*) as count From SkypeCDRBackLog.mergepdf2 ;";
@@ -375,6 +419,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Processing File Have Total Records " + totalCount + " & Processed Records Count is "
 					+ processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -392,11 +438,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int injuredWorkerCount = rs1.getInt("count");
 
-		if (injuredWorkerCount == 0)
+		if (injuredWorkerCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'DocucentGetPOS' ;";
@@ -419,6 +466,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -436,11 +485,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int injuredWorkerCount = rs1.getInt("count");
 
-		if (injuredWorkerCount == 0)
+		if (injuredWorkerCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'downloadDocsDDM' ;";
@@ -463,6 +513,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -480,11 +532,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int injuredWorkerCount = rs1.getInt("count");
 
-		if (injuredWorkerCount == 0)
+		if (injuredWorkerCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'SBRDoc' ;";
@@ -507,6 +560,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -525,11 +580,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int supDecCount = rs1.getInt("count");
 
-		if (supDecCount == 0)
+		if (supDecCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , FileName from SkypeCDRBackLog.DelarationFileList where Status is null and ServiceName = ? ;";
@@ -554,6 +610,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -572,11 +630,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int supDecCount = rs1.getInt("count");
 
-		if (supDecCount == 0)
+		if (supDecCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select FileID, ADJCounts , FileName from SkypeCDRBackLog.DelarationFileList where Status is null and ServiceName = ? ;";
@@ -601,6 +660,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -618,11 +679,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int supDecCount = rs1.getInt("count");
 
-		if (supDecCount == 0)
+		if (supDecCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select FileID, ADJCounts , FileName from SkypeCDRBackLog.DelarationFileList2 where Status is null ;";
@@ -646,6 +708,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -663,11 +727,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'ResizePDF' ;";
@@ -690,6 +755,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -707,11 +774,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'DownloadHCFA_Study' ;";
@@ -734,6 +802,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -751,11 +821,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'DownloadHCFA_AllStudy' ;";
@@ -778,6 +849,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -795,11 +868,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'DowloadInterpetingBill' ;";
@@ -822,6 +896,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -839,11 +915,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'DownloadLedger' ;";
@@ -866,6 +943,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -883,11 +962,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'DownloadLedger_AllStudy' ;";
@@ -910,6 +990,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -927,11 +1009,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'GetPDFPageNo' ;";
@@ -954,6 +1037,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -971,11 +1056,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'Copy_Record_ML' ;";
@@ -998,6 +1084,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -1015,11 +1103,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFileName from SkypeCDRBackLog.lienfiling where Status is null ;";
@@ -1042,6 +1131,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -1059,11 +1150,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'LienMultipleWithProvider' ;";
@@ -1086,6 +1178,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -1103,11 +1197,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'DocDownloadMed' ;";
@@ -1130,6 +1225,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -1147,11 +1244,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'PDFValidity' ;";
@@ -1174,6 +1272,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -1191,11 +1291,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.fetchhearingdata2 where Status is null ;";
@@ -1218,6 +1319,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -1235,11 +1338,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.fetchhearingdata_old where Status is null ;";
@@ -1262,6 +1366,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -1279,11 +1385,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.fetchhearingdata_old2 where Status is null ;";
@@ -1306,6 +1413,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -1323,11 +1432,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'GetDocName_Docucent' ;";
@@ -1350,6 +1460,8 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
@@ -1367,11 +1479,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 		int resizePDFCount = rs1.getInt("count");
 
-		if (resizePDFCount == 0)
+		if (resizePDFCount == 0) {
 
+			closeDBConnection();
 			return "Currently No File is Processing";
 
-		else {
+		}else {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'BulkEmail' ;";
@@ -1394,8 +1507,59 @@ public class DBQueries extends javax.swing.JDialog {
 
 			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
 					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
 			return responseText;
 		}
 
+	}
+
+	public String getDetailsConexemCandRPosting(String serviceType) throws SQLException {
+
+		String responseText;
+
+		mySt1 = myCon.createStatement();
+		myQuery1 = "select count(*) as count from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'Conexem_C&R' ;";
+		myPst = myCon.prepareStatement(myQuery1);
+		rs1 = myPst.executeQuery();
+		rs1.next();
+
+		int resizePDFCount = rs1.getInt("count");
+
+		if (resizePDFCount == 0) {
+
+			closeDBConnection();
+			return "Currently No File is Processing";
+
+		}else {
+
+			mySt1 = myCon.createStatement();
+			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'Conexem_C&R' ;";
+			myPst = myCon.prepareStatement(myQuery1);
+			rs1 = myPst.executeQuery();
+			rs1.next();
+
+			int fileid = rs1.getInt("ID");
+			int totalCount = rs1.getInt("ADJCounts");
+			String requestFilename = rs1.getString("RequestFilename");
+
+			mySt1 = myCon.createStatement();
+			myQuery1 = "select count(1) as count from conexem_commentposting where fileid = ? ;";
+			myPst = myCon.prepareStatement(myQuery1);
+			myPst.setInt(1, fileid);
+			rs1 = myPst.executeQuery();
+			rs1.next();
+
+			int processCount = rs1.getInt("count");
+
+			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
+					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
+			return responseText;
+		}
+
+	
+		
 	}
 }
