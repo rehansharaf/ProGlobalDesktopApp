@@ -1562,4 +1562,52 @@ public class DBQueries extends javax.swing.JDialog {
 	
 		
 	}
+
+	public String getDetailsFaxReceiptDownload(String serviceType) throws SQLException {
+
+		String responseText;
+
+		mySt1 = myCon.createStatement();
+		myQuery1 = "select count(*) as count from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'FaxReceipt_Download' ;";
+		myPst = myCon.prepareStatement(myQuery1);
+		rs1 = myPst.executeQuery();
+		rs1.next();
+
+		int resizePDFCount = rs1.getInt("count");
+
+		if (resizePDFCount == 0) {
+
+			closeDBConnection();
+			return "Currently No File is Processing";
+
+		}else {
+
+			mySt1 = myCon.createStatement();
+			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'FaxReceipt_Download' ;";
+			myPst = myCon.prepareStatement(myQuery1);
+			rs1 = myPst.executeQuery();
+			rs1.next();
+
+			int fileid = rs1.getInt("ID");
+			int totalCount = rs1.getInt("ADJCounts");
+			String requestFilename = rs1.getString("RequestFilename");
+
+			mySt1 = myCon.createStatement();
+			myQuery1 = "select count(1) as count from Ringcentral_FaxReceipt where fileid = ? ;";
+			myPst = myCon.prepareStatement(myQuery1);
+			myPst.setInt(1, fileid);
+			rs1 = myPst.executeQuery();
+			rs1.next();
+
+			int processCount = rs1.getInt("count");
+
+			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
+					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
+			return responseText;
+		}
+
+	
+	}
 }
