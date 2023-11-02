@@ -226,7 +226,7 @@ public class DBQueries extends javax.swing.JDialog {
 	private void dbConnection() {
 		
 	  try {	
-		mySQL = "jdbc:mysql://" + dbhost + ":3306/SkypeCDRBackLog?autoReconnect=true&useSSL=false";
+		mySQL = "jdbc:mysql://" + dbhost + ":3306/SkypeCDRBackLog?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true";
 		Class.forName(dbClassName);
 		myCon = DriverManager.getConnection(mySQL,dbuser,dbpass);
 	  }catch(Exception sqe) {
