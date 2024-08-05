@@ -588,13 +588,13 @@ public class DBQueries extends javax.swing.JDialog {
 		}else {
 
 			mySt1 = myCon.createStatement();
-			myQuery1 = "select ID, ADJCounts , FileName from SkypeCDRBackLog.DelarationFileList where Status is null and ServiceName = ? ;";
+			myQuery1 = "select FileID, ADJCounts , FileName from SkypeCDRBackLog.DelarationFileList where Status is null and ServiceName = ? ;";
 			myPst = myCon.prepareStatement(myQuery1);
 			myPst.setString(1, "SupDec");
 			rs1 = myPst.executeQuery();
 			rs1.next();
 
-			int fileid = rs1.getInt("ID");
+			int fileid = rs1.getInt("FileID");
 			int totalCount = rs1.getInt("ADJCounts");
 			String requestFilename = rs1.getString("FileName");
 
