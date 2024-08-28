@@ -123,8 +123,11 @@ public class MainUI extends javax.swing.JFrame {
         jLabel18 = new javax.swing.JLabel();
         btnConexemRussmanDataFetchUpload = new javax.swing.JButton();
         btnConexemRussmanDataFetchQueue = new javax.swing.JButton();
+        btnConexemDesertDataFetchQueue = new javax.swing.JButton();
         btnConexemRussmanDataFetchProcessing = new javax.swing.JButton();
+        btnConexemDesertDataFetchProcessing = new javax.swing.JButton();
         btnConexemRussmanDataFetchFileSample = new javax.swing.JButton();
+        btnConexemDesertDataFetchFileSample = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
         btnConexemDataFetchRFAUpload = new javax.swing.JButton();
         btnConexemRFAQueue = new javax.swing.JButton();
@@ -134,7 +137,11 @@ public class MainUI extends javax.swing.JFrame {
         btnInjuredWorkerDownload = new javax.swing.JButton();
         btnCandRDownload = new javax.swing.JButton();
         btnConexemRussmanDataFetchDownload = new javax.swing.JButton();
+        btnConexemDesertDataFetchDownload = new javax.swing.JButton();
         conexemDataFetchRFADownload = new javax.swing.JButton();
+        
+        jLabel20 = new javax.swing.JLabel();
+        btnConexemDesertDataFetchUpload = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Automation Utilities");
@@ -242,6 +249,17 @@ public class MainUI extends javax.swing.JFrame {
 				}
             }
         });
+        
+        btnConexemDesertDataFetchQueue.setText("Check");
+        btnConexemDesertDataFetchQueue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
+                	btnConexemDesertDataFetchQueue(evt);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+            }
+        });
 
         btnConexemRussmanDataFetchProcessing.setText("Check");
         btnConexemRussmanDataFetchProcessing.addActionListener(new java.awt.event.ActionListener() {
@@ -253,9 +271,27 @@ public class MainUI extends javax.swing.JFrame {
 				}
             }
         });
+        
+        btnConexemDesertDataFetchProcessing.setText("Check");
+        btnConexemDesertDataFetchProcessing.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	try {
+            		conexemDesertProcessing(evt);
+				} catch (ClassNotFoundException | SQLException e) {
+					e.printStackTrace();
+				}
+            }
+        });
 
         btnConexemRussmanDataFetchFileSample.setText("File Sample");
         btnConexemRussmanDataFetchFileSample.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	downloadSample("ConexemDataFetch.xls");
+            }
+        });
+        
+        btnConexemDesertDataFetchFileSample.setText("File Sample");
+        btnConexemDesertDataFetchFileSample.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	downloadSample("ConexemDataFetch.xls");
             }
@@ -309,6 +345,14 @@ public class MainUI extends javax.swing.JFrame {
 				}
             }
         });
+        
+        jLabel20.setText("Conexem_Desert&Attum_DataFetch");
+        btnConexemDesertDataFetchUpload.setText("Upload");
+        btnConexemDesertDataFetchUpload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	btnConexemDesertDataFetchUpload(evt);
+            }
+        });
 
         btnCandRDownload.setText("Download");
         btnCandRDownload.addActionListener(new java.awt.event.ActionListener() {
@@ -331,6 +375,17 @@ public class MainUI extends javax.swing.JFrame {
 				}
             }
         });
+        
+        btnConexemDesertDataFetchDownload.setText("Download");
+        btnConexemDesertDataFetchDownload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	try {
+            		conexemDataFetchDesertDownload(evt);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+            }
+        });
 
         conexemDataFetchRFADownload.setText("Download");
         conexemDataFetchRFADownload.addActionListener(new java.awt.event.ActionListener() {
@@ -344,7 +399,7 @@ public class MainUI extends javax.swing.JFrame {
         });
 
         jScrollPane1.setViewportView(jPanel2);
-        jPanel2.setLayout(new MigLayout("", "[208px,grow][65px,grow][79px,grow][72px,grow][70px,grow][85px,grow][70px:n,grow]", "[][23px][23][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px]"));
+        jPanel2.setLayout(new MigLayout("", "[208px,grow][65px,grow][79px,grow][72px,grow][70px,grow][85px,grow][70px:n,grow]", "[][23px][23][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][25.00px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][][23px][23px][23px][23px][23px][23px]"));
         
         JSeparator separator_4 = new JSeparator();
         jPanel2.add(separator_4, "cell 0 0");
@@ -2239,6 +2294,22 @@ public class MainUI extends javax.swing.JFrame {
         btnConexemRussmanDataFetchDesc.setText("Description");
         jPanel2.add(btnConexemRussmanDataFetchDesc, "cell 6 26,growx");
         
+        
+        btnConexemDesertDataFetchDesc = new JButton();
+        btnConexemDesertDataFetchDesc.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent evt) {
+        		
+        		String descText = "This service is used to fetch Desert & Attum data from conexem desert environment that includes tab (Medical Reports & Medical Necessity/EBM) "
+        				+ "against the provided external mrn and provider of conexem";
+        		DescFrame descframe = new DescFrame(descText);
+        		descframe.setVisible(true);
+        		
+        		
+        	}
+        });
+        btnConexemDesertDataFetchDesc.setText("Description");
+        jPanel2.add(btnConexemDesertDataFetchDesc, "cell 6 27,growx");
+        
         btnConexemDataFetchRFADesc = new JButton();
         btnConexemDataFetchRFADesc.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent evt) {
@@ -2252,7 +2323,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnConexemDataFetchRFADesc.setText("Description");
-        jPanel2.add(btnConexemDataFetchRFADesc, "cell 6 27,growx");
+        jPanel2.add(btnConexemDataFetchRFADesc, "cell 6 28,growx");
         
         btnDocucentUpload = new JButton();
         btnDocucentUpload.addActionListener(new ActionListener() {
@@ -2261,7 +2332,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocucentUpload.setText("Upload");
-        jPanel2.add(btnDocucentUpload, "cell 1 28,growx");
+        jPanel2.add(btnDocucentUpload, "cell 1 29,growx");
         
         btnDocucentDownload = new JButton();
         btnDocucentDownload.addActionListener(new ActionListener() {
@@ -2274,7 +2345,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocucentDownload.setText("Download");
-        jPanel2.add(btnDocucentDownload, "cell 2 28,growx");
+        jPanel2.add(btnDocucentDownload, "cell 2 29,growx");
         
         btnDocucentQueue = new JButton();
         btnDocucentQueue.addActionListener(new ActionListener() {
@@ -2287,7 +2358,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocucentQueue.setText("Check");
-        jPanel2.add(btnDocucentQueue, "cell 3 28,growx");
+        jPanel2.add(btnDocucentQueue, "cell 3 29,growx");
         
         btnDocucentProcessing = new JButton();
         btnDocucentProcessing.addActionListener(new ActionListener() {
@@ -2300,7 +2371,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocucentProcessing.setText("Check");
-        jPanel2.add(btnDocucentProcessing, "cell 4 28,growx");
+        jPanel2.add(btnDocucentProcessing, "cell 4 29,growx");
         
         btnDocucentFileSample = new JButton();
         btnDocucentFileSample.addActionListener(new ActionListener() {
@@ -2309,7 +2380,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocucentFileSample.setText("File Sample");
-        jPanel2.add(btnDocucentFileSample, "cell 5 28,growx");
+        jPanel2.add(btnDocucentFileSample, "cell 5 29,growx");
         
         btnDocucentDesc = new JButton();
         btnDocucentDesc.addActionListener(new ActionListener() {
@@ -2323,7 +2394,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocucentDesc.setText("Description");
-        jPanel2.add(btnDocucentDesc, "cell 6 28,growx");
+        jPanel2.add(btnDocucentDesc, "cell 6 29,growx");
         
         btnDocMergingDesc = new JButton();
         btnDocMergingDesc.addActionListener(new ActionListener() {
@@ -2337,11 +2408,11 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocMergingDesc.setText("Description");
-        jPanel2.add(btnDocMergingDesc, "cell 6 29,growx");
+        jPanel2.add(btnDocMergingDesc, "cell 6 30,growx");
         
         lblDocucentGetpos = new JLabel();
         lblDocucentGetpos.setText("Docucent Get POS");
-        jPanel2.add(lblDocucentGetpos, "cell 0 30");
+        jPanel2.add(lblDocucentGetpos, "cell 0 31");
         
         btnDocucentPOSUpload = new JButton();
         btnDocucentPOSUpload.addActionListener(new ActionListener() {
@@ -2350,7 +2421,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocucentPOSUpload.setText("Upload");
-        jPanel2.add(btnDocucentPOSUpload, "cell 1 30,growx");
+        jPanel2.add(btnDocucentPOSUpload, "cell 1 31,growx");
         
         btnDocucentPOSDownload = new JButton();
         btnDocucentPOSDownload.addActionListener(new ActionListener() {
@@ -2363,7 +2434,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocucentPOSDownload.setText("Download");
-        jPanel2.add(btnDocucentPOSDownload, "cell 2 30,growx");
+        jPanel2.add(btnDocucentPOSDownload, "cell 2 31,growx");
         
         btnDocucentPOSQueue = new JButton();
         btnDocucentPOSQueue.addActionListener(new ActionListener() {
@@ -2377,7 +2448,7 @@ public class MainUI extends javax.swing.JFrame {
         });
 
         btnDocucentPOSQueue.setText("Check");
-        jPanel2.add(btnDocucentPOSQueue, "cell 3 30,growx");
+        jPanel2.add(btnDocucentPOSQueue, "cell 3 31,growx");
         
         btnDocucentPOSProcessing = new JButton();
         btnDocucentPOSProcessing.addActionListener(new ActionListener() {
@@ -2390,7 +2461,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocucentPOSProcessing.setText("Check");
-        jPanel2.add(btnDocucentPOSProcessing, "cell 4 30,growx");
+        jPanel2.add(btnDocucentPOSProcessing, "cell 4 31,growx");
         
         btnDocucentPOSFileSample = new JButton();
         btnDocucentPOSFileSample.addActionListener(new ActionListener() {
@@ -2399,7 +2470,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocucentPOSFileSample.setText("File Sample");
-        jPanel2.add(btnDocucentPOSFileSample, "cell 5 30,growx");
+        jPanel2.add(btnDocucentPOSFileSample, "cell 5 31,growx");
         
         btnDocucentPOSDescription = new JButton();
         btnDocucentPOSDescription.addActionListener(new ActionListener() {
@@ -2413,11 +2484,11 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocucentPOSDescription.setText("Description");
-        jPanel2.add(btnDocucentPOSDescription, "cell 6 30,growx");
+        jPanel2.add(btnDocucentPOSDescription, "cell 6 31,growx");
         
         lblDocDownloadDdm = new JLabel();
         lblDocDownloadDdm.setText("DocsDownloadDDM");
-        jPanel2.add(lblDocDownloadDdm, "cell 0 31");
+        jPanel2.add(lblDocDownloadDdm, "cell 0 32");
         
         btnDocsDownDDMUpload = new JButton();
         btnDocsDownDDMUpload.addActionListener(new ActionListener() {
@@ -2426,7 +2497,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocsDownDDMUpload.setText("Upload");
-        jPanel2.add(btnDocsDownDDMUpload, "cell 1 31,growx");
+        jPanel2.add(btnDocsDownDDMUpload, "cell 1 32,growx");
         
         btnDocsDownDownload = new JButton();
         btnDocsDownDownload.addActionListener(new ActionListener() {
@@ -2439,7 +2510,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocsDownDownload.setText("Download");
-        jPanel2.add(btnDocsDownDownload, "cell 2 31,growx");
+        jPanel2.add(btnDocsDownDownload, "cell 2 32,growx");
         
         btnDocsDownDDMQueue = new JButton();
         btnDocsDownDDMQueue.addActionListener(new ActionListener() {
@@ -2454,7 +2525,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocsDownDDMQueue.setText("Check");
-        jPanel2.add(btnDocsDownDDMQueue, "cell 3 31,growx");
+        jPanel2.add(btnDocsDownDDMQueue, "cell 3 32,growx");
         
         btnDocsDownDDMProcessing = new JButton();
         btnDocsDownDDMProcessing.addActionListener(new ActionListener() {
@@ -2469,7 +2540,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocsDownDDMProcessing.setText("Check");
-        jPanel2.add(btnDocsDownDDMProcessing, "cell 4 31,growx");
+        jPanel2.add(btnDocsDownDDMProcessing, "cell 4 32,growx");
         
         btnDocsDownDDMFileSample = new JButton();
         btnDocsDownDDMFileSample.addActionListener(new ActionListener() {
@@ -2478,7 +2549,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocsDownDDMFileSample.setText("File Sample");
-        jPanel2.add(btnDocsDownDDMFileSample, "cell 5 31,growx");
+        jPanel2.add(btnDocsDownDDMFileSample, "cell 5 32,growx");
         
         btnDocsDownDDMDesc = new JButton();
         btnDocsDownDDMDesc.addActionListener(new ActionListener() {
@@ -2493,8 +2564,8 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocsDownDDMDesc.setText("Description");
-        jPanel2.add(btnDocsDownDDMDesc, "cell 6 31,growx");
-        jPanel2.add(jLabel16, "cell 0 32,alignx left,growy");
+        jPanel2.add(btnDocsDownDDMDesc, "cell 6 32,growx");
+        jPanel2.add(jLabel16, "cell 0 33,alignx left,growy");
         
         btnInjuredWorkerDesc = new JButton();
         btnInjuredWorkerDesc.addActionListener(new ActionListener() {
@@ -2508,7 +2579,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnInjuredWorkerDesc.setText("Description");
-        jPanel2.add(btnInjuredWorkerDesc, "cell 6 32,growx");
+        jPanel2.add(btnInjuredWorkerDesc, "cell 6 33,growx");
         jPanel2.add(jLabel17, "cell 0 25,alignx left,growy");
         
         btnCandRDesc = new JButton();
@@ -2527,33 +2598,39 @@ public class MainUI extends javax.swing.JFrame {
         
         lblDocucentRequest = new JLabel();
         lblDocucentRequest.setText("Docucent Request");
-        jPanel2.add(lblDocucentRequest, "cell 0 28");
+        jPanel2.add(lblDocucentRequest, "cell 0 29");
         jPanel2.add(jLabel18, "cell 0 26,alignx left,growy");
-        jPanel2.add(jLabel19, "cell 0 27,alignx left,growy");
-        jPanel2.add(btnInjuredWorkerUpload, "cell 1 32,grow");
+        jPanel2.add(jLabel19, "cell 0 28,alignx left,growy");
+        jPanel2.add(jLabel20, "cell 0 27,alignx left,growy");
+        jPanel2.add(btnInjuredWorkerUpload, "cell 1 33,grow");
         jPanel2.add(btnCandRUpload, "cell 1 25,grow");
         jPanel2.add(btnConexemRussmanDataFetchUpload, "cell 1 26,grow");
-        jPanel2.add(btnConexemDataFetchRFAUpload, "cell 1 27,grow");
-        jPanel2.add(btnInjuredWorkerDownload, "cell 2 32,grow");
+        jPanel2.add(btnConexemDesertDataFetchUpload, "cell 1 27,grow");
+        jPanel2.add(btnConexemDataFetchRFAUpload, "cell 1 28,grow");
+        jPanel2.add(btnInjuredWorkerDownload, "cell 2 33,grow");
         jPanel2.add(btnCandRDownload, "cell 2 25,grow");
         jPanel2.add(btnConexemRussmanDataFetchDownload, "cell 2 26,grow");
-        jPanel2.add(conexemDataFetchRFADownload, "cell 2 27,grow");
-        jPanel2.add(btnInjuredWorkerQueue, "cell 3 32,grow");
+        jPanel2.add(btnConexemDesertDataFetchDownload, "cell 2 27,grow");
+        jPanel2.add(conexemDataFetchRFADownload, "cell 2 28,grow");
+        jPanel2.add(btnInjuredWorkerQueue, "cell 3 33,grow");
         jPanel2.add(candrQueue, "cell 3 25,grow");
         jPanel2.add(btnConexemRussmanDataFetchQueue, "cell 3 26,grow");
-        jPanel2.add(btnConexemRFAQueue, "cell 3 27,grow");
-        jPanel2.add(btnInjuredWorkerProcessing, "cell 4 32,grow");
+        jPanel2.add(btnConexemDesertDataFetchQueue, "cell 3 27,grow");
+        jPanel2.add(btnConexemRFAQueue, "cell 3 28,grow");
+        jPanel2.add(btnInjuredWorkerProcessing, "cell 4 33,grow");
         jPanel2.add(candrProcessing, "cell 4 25,grow");
         jPanel2.add(btnConexemRussmanDataFetchProcessing, "cell 4 26,grow");
-        jPanel2.add(btnConexemRFAProcessing, "cell 4 27,grow");
-        jPanel2.add(btnInjuredWorkerFileSample, "cell 5 32,grow");
+        jPanel2.add(btnConexemDesertDataFetchProcessing, "cell 4 27,grow");
+        jPanel2.add(btnConexemRFAProcessing, "cell 4 28,grow");
+        jPanel2.add(btnInjuredWorkerFileSample, "cell 5 33,grow");
         jPanel2.add(btnCandRFileSample, "cell 5 25,grow");
-        jPanel2.add(btnConexemRFAFileSample, "cell 5 27,grow");
+        jPanel2.add(btnConexemRFAFileSample, "cell 5 28,grow");
         jPanel2.add(btnConexemRussmanDataFetchFileSample, "cell 5 26,grow");
+        jPanel2.add(btnConexemDesertDataFetchFileSample, "cell 5 27,grow");
         
         lblDocumentmerging = new JLabel();
         lblDocumentmerging.setText("Document Merging");
-        jPanel2.add(lblDocumentmerging, "cell 0 29,growy");
+        jPanel2.add(lblDocumentmerging, "cell 0 30,growy");
         
         btnDocMergingUpload = new JButton();
         btnDocMergingUpload.addActionListener(new ActionListener() {
@@ -2562,7 +2639,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocMergingUpload.setText("Upload");
-        jPanel2.add(btnDocMergingUpload, "cell 1 29,grow");
+        jPanel2.add(btnDocMergingUpload, "cell 1 30,grow");
         
         btnDocMergingDownload = new JButton();
         btnDocMergingDownload.addActionListener(new ActionListener() {
@@ -2575,7 +2652,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocMergingDownload.setText("Download");
-        jPanel2.add(btnDocMergingDownload, "cell 2 29,grow");
+        jPanel2.add(btnDocMergingDownload, "cell 2 30,grow");
         
         btnDocMergingQueue = new JButton();
         btnDocMergingQueue.addActionListener(new ActionListener() {
@@ -2588,7 +2665,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocMergingQueue.setText("Check");
-        jPanel2.add(btnDocMergingQueue, "cell 3 29,grow");
+        jPanel2.add(btnDocMergingQueue, "cell 3 30,grow");
         
         btnDocMergingProcessing = new JButton();
         btnDocMergingProcessing.addActionListener(new ActionListener() {
@@ -2601,7 +2678,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocMergingProcessing.setText("Check");
-        jPanel2.add(btnDocMergingProcessing, "cell 4 29,grow");
+        jPanel2.add(btnDocMergingProcessing, "cell 4 30,grow");
         
         btnDocMergingFileSample = new JButton();
         btnDocMergingFileSample.addActionListener(new ActionListener() {
@@ -2610,7 +2687,7 @@ public class MainUI extends javax.swing.JFrame {
         	}
         });
         btnDocMergingFileSample.setText("File Sample");
-        jPanel2.add(btnDocMergingFileSample, "cell 5 29,grow");
+        jPanel2.add(btnDocMergingFileSample, "cell 5 30,grow");
         
         JPanel panel = new JPanel();
 
@@ -3760,21 +3837,51 @@ public class MainUI extends javax.swing.JFrame {
 
     	        
     	    
-    }                                         
+    }   
+    
+    private void btnConexemDesertDataFetchUpload(java.awt.event.ActionEvent evt) {                                          
+        
+		// if the user presses the save button show the save dialog
+		String com = evt.getActionCommand();
+		try {
+		uploadFile(com,"Conexem_Desert&Attum_DataFetch_Request");
+		} catch (IOException ex) {
+		Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (InterruptedException ex) {
+		Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+	        
+	    
+}     
 
     private void conexemAllQueue(java.awt.event.ActionEvent evt) throws IOException {                                          
         
     	QueueFiles df = new QueueFiles(host,user,pass,"Conexem_Russman_DataFetch_Request");
         df.setVisible(true);
         
-    }                                         
+    }  
+    
+   private void btnConexemDesertDataFetchQueue(java.awt.event.ActionEvent evt) throws IOException {                                          
+        
+    	QueueFiles df = new QueueFiles(host,user,pass,"Conexem_Desert&Attum_DataFetch_Request");
+        df.setVisible(true);
+        
+    }   
 
     private void conexemAllProcessing(java.awt.event.ActionEvent evt) throws ClassNotFoundException, SQLException {       
     	
     	ProcessingFilePopup processing_pop = new ProcessingFilePopup("ConexemDataFetchAll");
     	processing_pop.setVisible(true);
         
-    }                                         
+    }   
+    
+   private void conexemDesertProcessing(java.awt.event.ActionEvent evt) throws ClassNotFoundException, SQLException {       
+    	
+    	ProcessingFilePopup processing_pop = new ProcessingFilePopup("ConexemDataFetchDesert");
+    	processing_pop.setVisible(true);
+        
+    }     
 
                                          
 
@@ -3826,7 +3933,14 @@ public class MainUI extends javax.swing.JFrame {
     	DownloadFrame df = new DownloadFrame(host,user,pass,"Conexem_Russman_DataFetch_Response");
         df.setVisible(true);
 
-    }                                         
+    }   
+    
+  private void conexemDataFetchDesertDownload(java.awt.event.ActionEvent evt) throws IOException {                                          
+        
+    	DownloadFrame df = new DownloadFrame(host,user,pass,"Conexem_Desert&Attum_DataFetch_Response");
+        df.setVisible(true);
+
+    }   
 
     private void conexemDataFetchRFADownload(java.awt.event.ActionEvent evt) throws IOException {                                          
     
@@ -3896,9 +4010,13 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JButton candrProcessing;
     private javax.swing.JButton btnCandRFileSample;
     private javax.swing.JButton btnConexemRussmanDataFetchUpload;
+    private javax.swing.JButton btnConexemDesertDataFetchUpload;
     private javax.swing.JButton btnConexemRussmanDataFetchQueue;
+    private javax.swing.JButton btnConexemDesertDataFetchQueue;
     private javax.swing.JButton btnConexemRussmanDataFetchProcessing;
+    private javax.swing.JButton btnConexemDesertDataFetchProcessing;
     private javax.swing.JButton btnConexemRussmanDataFetchFileSample;
+    private javax.swing.JButton btnConexemDesertDataFetchFileSample;
     private javax.swing.JButton btnConexemDataFetchRFAUpload;
     private javax.swing.JButton btnConexemRFAQueue;
     private javax.swing.JButton btnConexemRFAProcessing;
@@ -3906,12 +4024,14 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JButton btnInjuredWorkerDownload;
     private javax.swing.JButton btnCandRDownload;
     private javax.swing.JButton btnConexemRussmanDataFetchDownload;
+    private javax.swing.JButton btnConexemDesertDataFetchDownload;
     private javax.swing.JButton conexemDataFetchRFADownload;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabelDocMerging;
     private javax.swing.JScrollPane jScrollPane1;
     private JLabel lblDocumentmerging;
@@ -3936,6 +4056,7 @@ public class MainUI extends javax.swing.JFrame {
     private JButton btnDocucentPOSProcessing;
     private JButton btnDocucentPOSFileSample;
     private JButton btnConexemRussmanDataFetchDesc;
+    private JButton btnConexemDesertDataFetchDesc;
     private JButton btnConexemDataFetchRFADesc;
     private JButton btnDocMergingDesc;
     private JButton btnDocucentPOSDescription;

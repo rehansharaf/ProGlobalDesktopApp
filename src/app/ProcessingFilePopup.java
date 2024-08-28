@@ -190,6 +190,9 @@ public class ProcessingFilePopup extends javax.swing.JDialog {
 	    	}else if(serviceType.equals("ConexemDataFetchAll")) {
 	    		String filename = dbquery.getDetailsConexemDataFetchAll(serviceType);
 		    	jTextPane1.setText(filename);
+	    	}else if(serviceType.equals("ConexemDataFetchDesert")) {
+	    		String filename = dbquery.getDetailsConexemDataFetchDesert(serviceType);
+		    	jTextPane1.setText(filename);
 	    	}else if(serviceType.equals("ConexemDetailFetchRFA")) {
 	    		String filename = dbquery.getDetailsConexemDataFetchRFA(serviceType);
 		    	jTextPane1.setText(filename);

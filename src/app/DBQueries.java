@@ -169,6 +169,51 @@ public class DBQueries extends javax.swing.JDialog {
 		}
 
 	}
+	
+	public String getDetailsConexemDataFetchDesert(String serviceType) throws SQLException {
+
+		String responseText;
+
+		mySt1 = myCon.createStatement();
+		myQuery1 = "select count(*) as count from SkypeCDRBackLog.conexem_desert_dataFetch where status is null and type = 'All' ;";
+		myPst = myCon.prepareStatement(myQuery1);
+		rs1 = myPst.executeQuery();
+		rs1.next();
+
+		int conexemCount = rs1.getInt("count");
+
+		if (conexemCount == 0)
+
+			return "Currently No File is Processing";
+
+		else {
+
+			mySt1 = myCon.createStatement();
+			myQuery1 = "select ID, Filename, count from SkypeCDRBackLog.conexem_desert_dataFetch "
+					+ "where status is null and type = 'All' ;";
+			myPst = myCon.prepareStatement(myQuery1);
+			rs1 = myPst.executeQuery();
+			rs1.next();
+
+			int fileid = rs1.getInt("ID");
+			int totalCount = rs1.getInt("count");
+			String requestFilename = rs1.getString("Filename");
+
+			mySt1 = myCon.createStatement();
+			myQuery1 = "select count(*) as count from (select distinct patient_id from SkypeCDRBackLog.conexem_desert_datafetch_detail where fileid = ?) t ;";
+			myPst = myCon.prepareStatement(myQuery1);
+			myPst.setInt(1, fileid);
+			rs1 = myPst.executeQuery();
+			rs1.next();
+
+			int processCount = rs1.getInt("count");
+
+			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
+					+ " & Processed Records Count is " + processCount;
+			return responseText;
+		}
+
+	}
 
 	public String getDetailsConexemDataFetchRFA(String serviceType) throws SQLException {
 
