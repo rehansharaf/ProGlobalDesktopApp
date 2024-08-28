@@ -121,10 +121,10 @@ public class MainUI extends javax.swing.JFrame {
         candrProcessing = new javax.swing.JButton();
         btnCandRFileSample = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
-        btnConexemDataFetchAllUpload = new javax.swing.JButton();
-        btnConexemAllQueue = new javax.swing.JButton();
-        btnConexemProcessing = new javax.swing.JButton();
-        btnConexemFileSample = new javax.swing.JButton();
+        btnConexemRussmanDataFetchUpload = new javax.swing.JButton();
+        btnConexemRussmanDataFetchQueue = new javax.swing.JButton();
+        btnConexemRussmanDataFetchProcessing = new javax.swing.JButton();
+        btnConexemRussmanDataFetchFileSample = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
         btnConexemDataFetchRFAUpload = new javax.swing.JButton();
         btnConexemRFAQueue = new javax.swing.JButton();
@@ -133,7 +133,7 @@ public class MainUI extends javax.swing.JFrame {
         jLabelDocMerging = new javax.swing.JLabel();
         btnInjuredWorkerDownload = new javax.swing.JButton();
         btnCandRDownload = new javax.swing.JButton();
-        btnConexemDataFetchAllDownload = new javax.swing.JButton();
+        btnConexemRussmanDataFetchDownload = new javax.swing.JButton();
         conexemDataFetchRFADownload = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -223,17 +223,17 @@ public class MainUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel18.setText("ConexemDataFetchAll");
+        jLabel18.setText("Conexem_Russman_DataFetch");
 
-        btnConexemDataFetchAllUpload.setText("Upload");
-        btnConexemDataFetchAllUpload.addActionListener(new java.awt.event.ActionListener() {
+        btnConexemRussmanDataFetchUpload.setText("Upload");
+        btnConexemRussmanDataFetchUpload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	btnConexemDataFetchAllUpload(evt);
             }
         });
 
-        btnConexemAllQueue.setText("Check");
-        btnConexemAllQueue.addActionListener(new java.awt.event.ActionListener() {
+        btnConexemRussmanDataFetchQueue.setText("Check");
+        btnConexemRussmanDataFetchQueue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
 					conexemAllQueue(evt);
@@ -243,8 +243,8 @@ public class MainUI extends javax.swing.JFrame {
             }
         });
 
-        btnConexemProcessing.setText("Check");
-        btnConexemProcessing.addActionListener(new java.awt.event.ActionListener() {
+        btnConexemRussmanDataFetchProcessing.setText("Check");
+        btnConexemRussmanDataFetchProcessing.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	try {
 					conexemAllProcessing(evt);
@@ -254,8 +254,8 @@ public class MainUI extends javax.swing.JFrame {
             }
         });
 
-        btnConexemFileSample.setText("File Sample");
-        btnConexemFileSample.addActionListener(new java.awt.event.ActionListener() {
+        btnConexemRussmanDataFetchFileSample.setText("File Sample");
+        btnConexemRussmanDataFetchFileSample.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	downloadSample("ConexemDataFetch.xls");
             }
@@ -321,8 +321,8 @@ public class MainUI extends javax.swing.JFrame {
             }
         });
 
-        btnConexemDataFetchAllDownload.setText("Download");
-        btnConexemDataFetchAllDownload.addActionListener(new java.awt.event.ActionListener() {
+        btnConexemRussmanDataFetchDownload.setText("Download");
+        btnConexemRussmanDataFetchDownload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	try {
 					conexemDataFetchAllDownload(evt);
@@ -2224,11 +2224,11 @@ public class MainUI extends javax.swing.JFrame {
         btnFetchHearingReqDesc.setText("Description");
         jPanel2.add(btnFetchHearingReqDesc, "cell 6 24,growx");
         
-        btnConexemDataFetchAllDesc = new JButton();
-        btnConexemDataFetchAllDesc.addActionListener(new ActionListener() {
+        btnConexemRussmanDataFetchDesc = new JButton();
+        btnConexemRussmanDataFetchDesc.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent evt) {
         		
-        		String descText = "This service is used to fetch all the data from conexem environment that includes tab (Medical Reports & Medical Necessity/EBM) "
+        		String descText = "This service is used to fetch Russman data from conexem environment that includes tab (Medical Reports & Medical Necessity/EBM) "
         				+ "against the provided external mrn and provider of conexem";
         		DescFrame descframe = new DescFrame(descText);
         		descframe.setVisible(true);
@@ -2236,8 +2236,8 @@ public class MainUI extends javax.swing.JFrame {
         		
         	}
         });
-        btnConexemDataFetchAllDesc.setText("Description");
-        jPanel2.add(btnConexemDataFetchAllDesc, "cell 6 26,growx");
+        btnConexemRussmanDataFetchDesc.setText("Description");
+        jPanel2.add(btnConexemRussmanDataFetchDesc, "cell 6 26,growx");
         
         btnConexemDataFetchRFADesc = new JButton();
         btnConexemDataFetchRFADesc.addActionListener(new ActionListener() {
@@ -2532,24 +2532,24 @@ public class MainUI extends javax.swing.JFrame {
         jPanel2.add(jLabel19, "cell 0 27,alignx left,growy");
         jPanel2.add(btnInjuredWorkerUpload, "cell 1 32,grow");
         jPanel2.add(btnCandRUpload, "cell 1 25,grow");
-        jPanel2.add(btnConexemDataFetchAllUpload, "cell 1 26,grow");
+        jPanel2.add(btnConexemRussmanDataFetchUpload, "cell 1 26,grow");
         jPanel2.add(btnConexemDataFetchRFAUpload, "cell 1 27,grow");
         jPanel2.add(btnInjuredWorkerDownload, "cell 2 32,grow");
         jPanel2.add(btnCandRDownload, "cell 2 25,grow");
-        jPanel2.add(btnConexemDataFetchAllDownload, "cell 2 26,grow");
+        jPanel2.add(btnConexemRussmanDataFetchDownload, "cell 2 26,grow");
         jPanel2.add(conexemDataFetchRFADownload, "cell 2 27,grow");
         jPanel2.add(btnInjuredWorkerQueue, "cell 3 32,grow");
         jPanel2.add(candrQueue, "cell 3 25,grow");
-        jPanel2.add(btnConexemAllQueue, "cell 3 26,grow");
+        jPanel2.add(btnConexemRussmanDataFetchQueue, "cell 3 26,grow");
         jPanel2.add(btnConexemRFAQueue, "cell 3 27,grow");
         jPanel2.add(btnInjuredWorkerProcessing, "cell 4 32,grow");
         jPanel2.add(candrProcessing, "cell 4 25,grow");
-        jPanel2.add(btnConexemProcessing, "cell 4 26,grow");
+        jPanel2.add(btnConexemRussmanDataFetchProcessing, "cell 4 26,grow");
         jPanel2.add(btnConexemRFAProcessing, "cell 4 27,grow");
         jPanel2.add(btnInjuredWorkerFileSample, "cell 5 32,grow");
         jPanel2.add(btnCandRFileSample, "cell 5 25,grow");
         jPanel2.add(btnConexemRFAFileSample, "cell 5 27,grow");
-        jPanel2.add(btnConexemFileSample, "cell 5 26,grow");
+        jPanel2.add(btnConexemRussmanDataFetchFileSample, "cell 5 26,grow");
         
         lblDocumentmerging = new JLabel();
         lblDocumentmerging.setText("Document Merging");
@@ -3751,7 +3751,7 @@ public class MainUI extends javax.swing.JFrame {
 			// if the user presses the save button show the save dialog
 			String com = evt.getActionCommand();
 			try {
-			uploadFile(com,"Conexem_DataFetch_Request");
+			uploadFile(com,"Conexem_Russman_DataFetch_Request");
 			} catch (IOException ex) {
 			Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
 			} catch (InterruptedException ex) {
@@ -3764,7 +3764,7 @@ public class MainUI extends javax.swing.JFrame {
 
     private void conexemAllQueue(java.awt.event.ActionEvent evt) throws IOException {                                          
         
-    	QueueFiles df = new QueueFiles(host,user,pass,"Conexem_DataFetch_Request");
+    	QueueFiles df = new QueueFiles(host,user,pass,"Conexem_Russman_DataFetch_Request");
         df.setVisible(true);
         
     }                                         
@@ -3823,7 +3823,7 @@ public class MainUI extends javax.swing.JFrame {
 
     private void conexemDataFetchAllDownload(java.awt.event.ActionEvent evt) throws IOException {                                          
         
-    	DownloadFrame df = new DownloadFrame(host,user,pass,"Conexem_DataFetch_Response");
+    	DownloadFrame df = new DownloadFrame(host,user,pass,"Conexem_Russman_DataFetch_Response");
         df.setVisible(true);
 
     }                                         
@@ -3895,17 +3895,17 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JButton candrQueue;
     private javax.swing.JButton candrProcessing;
     private javax.swing.JButton btnCandRFileSample;
-    private javax.swing.JButton btnConexemDataFetchAllUpload;
-    private javax.swing.JButton btnConexemAllQueue;
-    private javax.swing.JButton btnConexemProcessing;
-    private javax.swing.JButton btnConexemFileSample;
+    private javax.swing.JButton btnConexemRussmanDataFetchUpload;
+    private javax.swing.JButton btnConexemRussmanDataFetchQueue;
+    private javax.swing.JButton btnConexemRussmanDataFetchProcessing;
+    private javax.swing.JButton btnConexemRussmanDataFetchFileSample;
     private javax.swing.JButton btnConexemDataFetchRFAUpload;
     private javax.swing.JButton btnConexemRFAQueue;
     private javax.swing.JButton btnConexemRFAProcessing;
     private javax.swing.JButton btnConexemRFAFileSample;
     private javax.swing.JButton btnInjuredWorkerDownload;
     private javax.swing.JButton btnCandRDownload;
-    private javax.swing.JButton btnConexemDataFetchAllDownload;
+    private javax.swing.JButton btnConexemRussmanDataFetchDownload;
     private javax.swing.JButton conexemDataFetchRFADownload;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel16;
@@ -3935,7 +3935,7 @@ public class MainUI extends javax.swing.JFrame {
     private JButton btnDocucentPOSQueue;
     private JButton btnDocucentPOSProcessing;
     private JButton btnDocucentPOSFileSample;
-    private JButton btnConexemDataFetchAllDesc;
+    private JButton btnConexemRussmanDataFetchDesc;
     private JButton btnConexemDataFetchRFADesc;
     private JButton btnDocMergingDesc;
     private JButton btnDocucentPOSDescription;
