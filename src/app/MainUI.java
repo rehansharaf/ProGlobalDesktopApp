@@ -69,6 +69,8 @@ import java.awt.FlowLayout;
  * @author Rehan
  */
 public class MainUI extends javax.swing.JFrame {
+	
+	private static final Logger logger = Logger.getLogger(MainUI.class.getName());
 
     /**
      * Creates new form MainUI
@@ -3145,11 +3147,11 @@ public class MainUI extends javax.swing.JFrame {
         btnHearingTestReq2Download = new JButton();
         btnHearingTestReq2Download.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent evt) {
-        		try {
+        		//try {
 					hearingTestReq2Download(evt);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				//} catch (IOException e) {
+					//e.printStackTrace();
+				//}
         	}
         });
         btnHearingTestReq2Download.setText("Download");
@@ -3901,10 +3903,28 @@ public class MainUI extends javax.swing.JFrame {
 		}
 	}
 
-	public void hearingTestReq2Download(ActionEvent evt) throws IOException {
+	/*public void hearingTestReq2Download(ActionEvent evt) throws IOException {
 
-    	DownloadFrame df = new DownloadFrame(host,user,pass,"HearingTestRes2");
-        df.setVisible(true);
+		DownloadFrame df = new DownloadFrame(host,user,pass,"HearingTestRes2");
+	    df.setVisible(true);
+		}
+	 */
+
+	public void hearingTestReq2Download(ActionEvent evt) {
+	    try {
+	        logger.info("Opening download frame for service: HearingTestRes2");
+	        DownloadFrame df = new DownloadFrame(host, user, pass, "HearingTestRes2");
+	        df.setVisible(true);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        logger.severe("Error opening HearingTestRes2 download dialog: " + e.toString());
+	        javax.swing.JOptionPane.showMessageDialog(
+	            null,
+	            "Unable to open download window.\n" + e.toString(),
+	            "Error",
+	            javax.swing.JOptionPane.ERROR_MESSAGE
+	        );
+	    }
 	}
 
 	public void hearingTestReq2Queue(ActionEvent evt) throws IOException {

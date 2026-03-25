@@ -14,7 +14,7 @@ public class GetAllFiles {
 	
 	
 	
-	public FTPFile[] getAllFilesFromFolder(String directory, String hostName, String username, String password) throws IOException {
+	/*public FTPFile[] getAllFilesFromFolder(String directory, String hostName, String username, String password) throws IOException {
 			
 			FTPClient ftp = new FTPClient();
 			ftp = new FTPClient();
@@ -52,39 +52,7 @@ public class GetAllFiles {
 	        ftp.setControlKeepAliveTimeout(3000);
 	        ftp.setDataTimeout(3000); // 100 minutes
 	        ftp.setConnectTimeout(3000); // 100 minutes
-	        
-	        /*ftp.login(username, password);
-	        ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
-	        ftp.enterLocalPassiveMode();  
-	        ftp.setKeepAlive(true);
-	        ftp.setControlKeepAliveTimeout(3000);
-	        ftp.setDataTimeout(3000); // 100 minutes
-	        ftp.setConnectTimeout(3000); // 100 minutes
-
-	        // You're ignoring the host you past in to the constructor
-			try {
-				ftp.connect(hostName, 21);
-			}catch(java.net.ConnectException ce) {
-				ErrorFrame errFrame = new ErrorFrame("Error: Establishing Connection with Server");
-	        	errFrame.setVisible(true);
-			}
-	        ftp.login(username, password);
-
-	        ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
-
-	        ftp.setKeepAlive(true);
-	        ftp.setControlKeepAliveTimeout(3000);
-	        ftp.setDataTimeout(3000); // 100 minutes
-	        ftp.setConnectTimeout(3000); // 100 minutes
-	        
-
-	        int reply = ftp.getReplyCode();
-	        System.out.println("Received Reply from FTP Connection:" + reply);
-
-	        if (FTPReply.isPositiveCompletion(reply)) {
-	            System.out.println("Connected Success");
-	        
-	        }*/
+	   
 	        
 	        ftp.changeWorkingDirectory("/");
 	        
@@ -97,18 +65,76 @@ public class GetAllFiles {
 			
 			return files;
 
-			/*for (FTPFile file : files) {
-				String details = file.getName();
-				//System.out.println(details);
-				if (details.equals(fileName)) {
-					//System.out.println("Correct Filename");
-					verificationFilename = details.equals(fileName);
-					assertTrue(
-							"Verification Failed: The filename is not updated at the CDN end.",
-							details.equals(fileName));
-				}
-			}*/
+			
 	        
-	}
+	}*/
+	
+	public FTPFile[] getAllFilesFromFolder(String directory, String hostName, String username, String password) throws IOException {
+
+        FTPClient ftp = new FTPClient();
+        ftp.setBufferSize(1024000);
+        ftp.setControlEncoding("UTF-8");
+        ftp.setConnectTimeout(3000);
+        ftp.setDataTimeout(3000);
+        ftp.setControlKeepAliveTimeout(3000);
+
+        try {
+            ftp.connect(hostName, 21);
+
+            int reply = ftp.getReplyCode();
+            if (!FTPReply.isPositiveCompletion(reply)) {
+                throw new IOException("FTP server refused connection. Reply code: " + reply);
+            }
+
+            boolean loggedIn = ftp.login(username, password);
+            if (!loggedIn) {
+                throw new IOException("FTP login failed for user: " + username);
+            }
+
+            ftp.setFileType(FTP.BINARY_FILE_TYPE);
+
+            // safer to always use passive mode unless you specifically need active mode
+            ftp.enterLocalPassiveMode();
+
+            ftp.changeWorkingDirectory("/");
+
+            FTPFile[] files = ftp.listFiles(directory);
+
+            if (files == null) {
+                throw new IOException("FTP listFiles returned null for directory: " + directory);
+            }
+
+            // remove null entries if any
+            files = Arrays.stream(files)
+                    .filter(f -> f != null && f.getName() != null)
+                    .toArray(FTPFile[]::new);
+
+            // sort safely even if timestamp is null
+            Arrays.sort(files, Comparator.comparing(
+                    (FTPFile remoteFile) -> remoteFile.getTimestamp(),
+                    Comparator.nullsLast(Comparator.naturalOrder())
+            ).reversed());
+
+            return files;
+
+        } catch (java.net.ConnectException ce) {
+            ErrorFrame errFrame = new ErrorFrame("Error: Establishing Connection with Server");
+            errFrame.setVisible(true);
+            throw new IOException("Unable to connect to FTP server: " + hostName, ce);
+        } finally {
+            if (ftp.isConnected()) {
+                try {
+                    ftp.logout();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    ftp.disconnect();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
 }
