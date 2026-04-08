@@ -29,6 +29,10 @@ public class DBQueries extends javax.swing.JDialog {
 		setModal(false);
 
 	}
+	
+	public Connection getConnection() {
+	    return myCon;
+	}
 
 	public String getDetailsInjuredWorker(String serviceType) throws SQLException, ClassNotFoundException {
 
@@ -125,12 +129,12 @@ public class DBQueries extends javax.swing.JDialog {
 
 	}
 
-	public String getDetailsConexemDataFetchAll(String serviceType) throws SQLException {
+	public String getDetailsConexemDataFetch_DOS(String serviceType) throws SQLException {
 
 		String responseText;
 
 		mySt1 = myCon.createStatement();
-		myQuery1 = "select count(*) as count from SkypeCDRBackLog.conexemdoc_list_dataFetch where status is null and type = 'All' ;";
+		myQuery1 = "select count(*) as count from SkypeCDRBackLog.conexemdoc_list_dataFetch where status is null and type = 'SP_DOS' ;";
 		myPst = myCon.prepareStatement(myQuery1);
 		rs1 = myPst.executeQuery();
 		rs1.next();
@@ -145,7 +149,7 @@ public class DBQueries extends javax.swing.JDialog {
 
 			mySt1 = myCon.createStatement();
 			myQuery1 = "select ID, Filename, count from SkypeCDRBackLog.conexemdoc_list_dataFetch "
-					+ "where status is null and type = 'All' ;";
+					+ "where status is null and type = 'SP_DOS' ;";
 			myPst = myCon.prepareStatement(myQuery1);
 			rs1 = myPst.executeQuery();
 			rs1.next();
@@ -1654,5 +1658,91 @@ public class DBQueries extends javax.swing.JDialog {
 		}
 
 	
+	}
+
+	public String getDetailsMedflowDocUpload(String serviceType) throws SQLException {
+
+		String responseText;
+		
+		int service = 0;
+		String instance = null;
+		
+		if(serviceType.equals("MedflowDocUpload_Pharmacy_1")) {
+			service = 1;
+			instance = "Pharmacy";
+		}else if(serviceType.equals("MedflowDocUpload_Pharmacy_2")) {
+			service = 2;
+			instance = "Pharmacy";
+		}else if(serviceType.equals("MedflowDocUpload_IWP_1")) {
+			service = 1;
+			instance = "IWP";
+		}else if(serviceType.equals("MedflowDocUpload_IWP_2")) {
+			service = 2;
+			instance = "IWP";
+		}else if(serviceType.equals("MedflowDocUpload_PI_1")) {
+			service = 1;
+			instance = "PI";
+		}else if(serviceType.equals("MedflowDocUpload_PI_2")) {
+			service = 2;
+			instance = "PI";
+		}else if(serviceType.equals("MedflowDocUpload_KHI_1")) {
+			service = 1;
+			instance = "KHI";
+		}else if(serviceType.equals("MedflowDocUpload_KHI_2")) {
+			service = 2;
+			instance = "KHI";
+		}else if(serviceType.equals("MedflowDocUpload_KHI_3")) {
+			service = 3;
+			instance = "KHI";
+		}else if(serviceType.equals("MedflowDocUpload_KHI_4")) {
+			service = 4;
+			instance = "KHI";
+		}
+
+		mySt1 = myCon.createStatement();
+		myQuery1 = "select count(*) as count from SkypeCDRBackLog.medflow_docupload where Status is null and service = ? and instance = ? ;";
+		myPst = myCon.prepareStatement(myQuery1);
+		myPst.setInt(1, service);
+		myPst.setString(2, instance);
+		rs1 = myPst.executeQuery();
+		rs1.next();
+
+		int resizePDFCount = rs1.getInt("count");
+
+		if (resizePDFCount == 0) {
+
+			closeDBConnection();
+			return "Currently No File is Processing";
+
+		}else {
+
+			mySt1 = myCon.createStatement();
+			myQuery1 = "select ID, RequestFileName, Reccount from SkypeCDRBackLog.medflow_docupload where Status is null and service = ? and instance = ? ;";
+			myPst = myCon.prepareStatement(myQuery1);
+			myPst.setInt(1, service);
+			myPst.setString(2, instance);
+			rs1 = myPst.executeQuery();
+			rs1.next();
+
+			int fileid = rs1.getInt("ID");
+			int totalCount = rs1.getInt("Reccount");
+			String requestFilename = rs1.getString("RequestFileName");
+
+			mySt1 = myCon.createStatement();
+			myQuery1 = "select count(1) as count from medflow_docupload_detail where fileid = ? ;";
+			myPst = myCon.prepareStatement(myQuery1);
+			myPst.setInt(1, fileid);
+			rs1 = myPst.executeQuery();
+			rs1.next();
+
+			int processCount = rs1.getInt("count");
+
+			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
+					+ " & Processed Records Count is " + processCount;
+			
+			closeDBConnection();
+			return responseText;
+		}
+
 	}
 }

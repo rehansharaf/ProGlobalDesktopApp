@@ -78,8 +78,10 @@ public class MainUI extends javax.swing.JFrame {
 	
 	private String host = "10.0.0.91";
 	//private String host = "182.184.111.111";
-	private String user = "rehanedex";
-	private String pass = "rehanedex";
+	//private String user = "rehanedex";
+	//private String pass = "rehanedex";
+	private String user = "rehan2";
+	private String pass = "rehan123!@#";
 	
     public MainUI() {
     	//setResizable(false);
@@ -238,12 +240,12 @@ public class MainUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel18.setText("Conexem_Russman_DataFetch");
+        jLabel18.setText("Conexem_Russman_DataFetch_DOS");
 
         btnConexemRussmanDataFetchUpload.setText("Upload");
         btnConexemRussmanDataFetchUpload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	btnConexemDataFetchAllUpload(evt);
+            	btnConexemDataFetchDOSUpload(evt);
             }
         });
 
@@ -251,7 +253,7 @@ public class MainUI extends javax.swing.JFrame {
         btnConexemRussmanDataFetchQueue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
-					conexemAllQueue(evt);
+					conexemDOSQueue(evt);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -273,7 +275,7 @@ public class MainUI extends javax.swing.JFrame {
         btnConexemRussmanDataFetchProcessing.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	try {
-					conexemAllProcessing(evt);
+					conexemDOSProcessing(evt);
 				} catch (ClassNotFoundException | SQLException e) {
 					e.printStackTrace();
 				}
@@ -294,7 +296,7 @@ public class MainUI extends javax.swing.JFrame {
         btnConexemRussmanDataFetchFileSample.setText("File Sample");
         btnConexemRussmanDataFetchFileSample.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	downloadSample("ConexemDataFetch.xls");
+            	downloadSample("ConexemDataFetch_DOS.xls");
             }
         });
         
@@ -377,7 +379,7 @@ public class MainUI extends javax.swing.JFrame {
         btnConexemRussmanDataFetchDownload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	try {
-					conexemDataFetchAllDownload(evt);
+					conexemDataFetchDOSDownload(evt);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -1978,7 +1980,7 @@ public class MainUI extends javax.swing.JFrame {
         btnSupDecAllPartyFileSample = new JButton();
         btnSupDecAllPartyFileSample.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent evt) {
-        		downloadSample("SupDecAllPartyRequest.xls");
+        		downloadSample("SupDecAllPartyRequest_1.xls");
         	}
         });
         btnSupDecAllPartyFileSample.setText("File Sample");
@@ -3293,7 +3295,7 @@ public class MainUI extends javax.swing.JFrame {
         	public void actionPerformed(ActionEvent evt) {
         		
         		String descText = "This service is used to fetch Russman data from conexem environment that includes tab (Medical Reports & Medical Necessity/EBM) "
-        				+ "against the provided external mrn and provider of conexem";
+        				+ "against the provided external mrn and provider of conexem against specific DOS";
         		DescFrame descframe = new DescFrame(descText);
         		descframe.setVisible(true);
         		
@@ -4858,12 +4860,12 @@ public class MainUI extends javax.swing.JFrame {
 
                                             
 
-    private void btnConexemDataFetchAllUpload(java.awt.event.ActionEvent evt) {                                          
+    private void btnConexemDataFetchDOSUpload(java.awt.event.ActionEvent evt) {                                          
         
 			// if the user presses the save button show the save dialog
 			String com = evt.getActionCommand();
 			try {
-			uploadFile(com,"Conexem_Russman_DataFetch_Request");
+			uploadFile(com,"Conexem_Russman_DataFetch_DOS_Request");
 			} catch (IOException ex) {
 			Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
 			} catch (InterruptedException ex) {
@@ -4890,9 +4892,9 @@ public class MainUI extends javax.swing.JFrame {
 	    
 }     
 
-    private void conexemAllQueue(java.awt.event.ActionEvent evt) throws IOException {                                          
+    private void conexemDOSQueue(java.awt.event.ActionEvent evt) throws IOException {                                          
         
-    	QueueFiles df = new QueueFiles(host,user,pass,"Conexem_Russman_DataFetch_Request");
+    	QueueFiles df = new QueueFiles(host,user,pass,"Conexem_Russman_DataFetch_DOS_Request");
         df.setVisible(true);
         
     }  
@@ -4904,9 +4906,9 @@ public class MainUI extends javax.swing.JFrame {
         
     }   
 
-    private void conexemAllProcessing(java.awt.event.ActionEvent evt) throws ClassNotFoundException, SQLException {       
+    private void conexemDOSProcessing(java.awt.event.ActionEvent evt) throws ClassNotFoundException, SQLException {       
     	
-    	ProcessingFilePopup processing_pop = new ProcessingFilePopup("ConexemDataFetchAll");
+    	ProcessingFilePopup processing_pop = new ProcessingFilePopup("ConexemDataFetch_DOS");
     	processing_pop.setVisible(true);
         
     }   
@@ -4963,9 +4965,9 @@ public class MainUI extends javax.swing.JFrame {
          
     }                                         
 
-    private void conexemDataFetchAllDownload(java.awt.event.ActionEvent evt) throws IOException {                                          
+    private void conexemDataFetchDOSDownload(java.awt.event.ActionEvent evt) throws IOException {                                          
         
-    	DownloadFrame df = new DownloadFrame(host,user,pass,"Conexem_Russman_DataFetch_Response");
+    	DownloadFrame df = new DownloadFrame(host,user,pass,"Conexem_Russman_DataFetch_DOS_Response");
         df.setVisible(true);
 
     }   

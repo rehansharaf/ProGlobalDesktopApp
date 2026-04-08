@@ -187,8 +187,8 @@ public class ProcessingFilePopup extends javax.swing.JDialog {
 	    	}else if(serviceType.equals("candrEvents")) {
 	    		String filename = dbquery.getDetailsCandR(serviceType);
 		    	jTextPane1.setText(filename);
-	    	}else if(serviceType.equals("ConexemDataFetchAll")) {
-	    		String filename = dbquery.getDetailsConexemDataFetchAll(serviceType);
+	    	}else if(serviceType.equals("ConexemDataFetch_DOS")) {
+	    		String filename = dbquery.getDetailsConexemDataFetch_DOS(serviceType);
 		    	jTextPane1.setText(filename);
 	    	}else if(serviceType.equals("ConexemDataFetchDesert")) {
 	    		String filename = dbquery.getDetailsConexemDataFetchDesert(serviceType);
@@ -279,6 +279,43 @@ public class ProcessingFilePopup extends javax.swing.JDialog {
 		    	jTextPane1.setText(filename);
 	    	}else if(serviceType.equals("Ringcentral_FaxReceipt")) {
 	    		String filename = dbquery.getDetailsFaxReceiptDownload(serviceType);
+		    	jTextPane1.setText(filename);
+	    	}else if(serviceType.equals("MedflowDocUpload_Pharmacy_2")) {
+	    		String filename = dbquery.getDetailsMedflowDocUpload(serviceType);
+		    	jTextPane1.setText(filename);
+	    	}else if(serviceType.equals("MedflowDocUpload_Pharmacy_1")) {
+	    		String filename = dbquery.getDetailsMedflowDocUpload(serviceType);
+		    	jTextPane1.setText(filename);
+	    	}
+	    	
+	    	
+	    	else if(serviceType.equals("MedflowDocUpload_PI_1")) {
+	    		String filename = dbquery.getDetailsMedflowDocUpload(serviceType);
+		    	jTextPane1.setText(filename);
+	    	}else if(serviceType.equals("MedflowDocUpload_PI_2")) {
+	    		String filename = dbquery.getDetailsMedflowDocUpload(serviceType);
+		    	jTextPane1.setText(filename);
+	    	}
+	    	
+	    	else if(serviceType.equals("MedflowDocUpload_IWP_1")) {
+	    		String filename = dbquery.getDetailsMedflowDocUpload(serviceType);
+		    	jTextPane1.setText(filename);
+	    	}else if(serviceType.equals("MedflowDocUpload_IWP_2")) {
+	    		String filename = dbquery.getDetailsMedflowDocUpload(serviceType);
+		    	jTextPane1.setText(filename);
+	    	}
+	    	
+	    	else if(serviceType.equals("MedflowDocUpload_KHI_1")) {
+	    		String filename = dbquery.getDetailsMedflowDocUpload(serviceType);
+		    	jTextPane1.setText(filename);
+	    	}else if(serviceType.equals("MedflowDocUpload_KHI_2")) {
+	    		String filename = dbquery.getDetailsMedflowDocUpload(serviceType);
+		    	jTextPane1.setText(filename);
+	    	}else if(serviceType.equals("MedflowDocUpload_KHI_3")) {
+	    		String filename = dbquery.getDetailsMedflowDocUpload(serviceType);
+		    	jTextPane1.setText(filename);
+	    	}else if(serviceType.equals("MedflowDocUpload_KHI_4")) {
+	    		String filename = dbquery.getDetailsMedflowDocUpload(serviceType);
 		    	jTextPane1.setText(filename);
 	    	}
 	
