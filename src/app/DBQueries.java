@@ -274,7 +274,7 @@ public class DBQueries extends javax.swing.JDialog {
 
 	private void dbConnection() {
 		
-	  try {	
+	 /* try {	
 		mySQL = "jdbc:mysql://" + dbhost + ":3306/SkypeCDRBackLog?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true";
 		Class.forName(dbClassName);
 		myCon = DriverManager.getConnection(mySQL,dbuser,dbpass);
@@ -284,56 +284,26 @@ public class DBQueries extends javax.swing.JDialog {
 		  erFrame.setVisible(true);
 		  sqe.printStackTrace();
 	  }
+	  */
 		
+		try {	
+		    DriverManager.setLoginTimeout(3);
+
+		    mySQL = "jdbc:mysql://" + dbhost + ":3306/SkypeCDRBackLog"
+		            + "?useSSL=false"
+		            + "&allowPublicKeyRetrieval=true"
+		            + "&connectTimeout=3000";
+
+		    Class.forName(dbClassName);
+		    myCon = DriverManager.getConnection(mySQL, dbuser, dbpass);
+
+		} catch (Exception sqe) {
+		    ErrorFrame erFrame = new ErrorFrame("Error: Establishing Connection with Database", ErrorUtils.getErrorDetail(sqe));
+		    erFrame.setVisible(true);
+		    sqe.printStackTrace();
+		}
 		
-		/*mySQL = "jdbc:mysql://" + dbhost + ":3306/SkypeCDRBackLog?autoReconnect=true&useSSL=false";
-		try {
-			myCon = DriverManager.getConnection(mySQL, dbuser, dbpass);
-		} catch (SQLException e2) {
-			e2.printStackTrace();
-		}
 
-		   
-		try {
-			Class.forName(dbClassName);
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-		}
-		try {
-			myCon = DriverManager.getConnection(mySQL,myUName,myPswd);
-		} catch (SQLException e1) {
-			ErrorFrame erFrame = new ErrorFrame("Error: Establishing Connection with Database");
-			erFrame.setVisible(true);
-			e1.printStackTrace();
-		}*/
-
-		/*try {
-
-			mySt1 = myCon.createStatement();
-			myQuery1 = "select * From SkypeCDRBackLog.mergepdf2 limit 1 ;";
-			myPst = myCon.prepareStatement(myQuery1);
-			rs1 = myPst.executeQuery();
-			rs1.next();
-
-		} catch (Exception e) {
-
-			mySQL = "jdbc:mysql://" + dbhost + ":3306/SkypeCDRBackLog?autoReconnect=true&useSSL=false";
-			try {
-				Class.forName(dbClassName);
-			} catch (ClassNotFoundException el) {
-				e.printStackTrace();
-			}
-			try {
-				myCon = DriverManager.getConnection(mySQL, dbuser, dbpass);
-			} catch (SQLException el) {
-
-				ErrorFrame erFrame = new ErrorFrame("Error: Establishing Connection with Database");
-				erFrame.setVisible(true);
-
-				e.printStackTrace();
-			}
-
-		}*/
 
 	}
 

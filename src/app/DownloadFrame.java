@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 import javax.swing.GroupLayout;
@@ -207,7 +208,7 @@ public class DownloadFrame extends javax.swing.JDialog {
         this.setModal(val);
     }
 
-    public void downloadSelectedRows(ArrayList<String> filename) {
+   /* public void downloadSelectedRows(ArrayList<String> filename) {
         JFileChooser f = new JFileChooser();
         f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int r = f.showSaveDialog(null);
@@ -246,6 +247,75 @@ public class DownloadFrame extends javax.swing.JDialog {
                                     downloadp.dispose();
                                 } else {
                                     downloadp.jbutton1ChangeVisiblity(true);
+                                }
+                            }
+                        }
+                    });
+
+                    worker.execute();
+
+                } catch (MalformedURLException ex) {
+                    ex.printStackTrace();
+                    logger.severe("MalformedURLException while downloading file: " + ex.getMessage());
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                    logger.severe("InterruptedException while downloading file: " + e1.getMessage());
+                }
+            }
+        }
+    }
+    */
+    
+    public void downloadSelectedRows(ArrayList<String> filename) {
+        JFileChooser f = new JFileChooser();
+        f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int r = f.showSaveDialog(null);
+
+        if (r == JFileChooser.APPROVE_OPTION) {
+            System.out.println(f.getSelectedFile());
+            File localDir = f.getSelectedFile();
+
+            final AtomicBoolean errorShown = new AtomicBoolean(false);
+
+            for (int i = 0; i < filename.size(); i++) {
+                try {
+                    final DownloadPopup downloadp = new DownloadPopup();
+                    downloadp.setVisible(true);
+
+                    final DownloadWorker worker = new DownloadWorker(
+                            host, user, pass, new File(filename.get(i)), service, localDir
+                    );
+
+                    worker.addPropertyChangeListener(new PropertyChangeListener() {
+                        @Override
+                        public void propertyChange(PropertyChangeEvent evt) {
+
+                            if ("progress".equals(evt.getPropertyName())) {
+                                downloadp.jbutton1ChangeVisiblity(false);
+                                downloadp.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+                                Integer progress = (Integer) evt.getNewValue();
+
+                                try {
+                                    downloadp.progressBarVal(progress);
+                                } catch (MalformedURLException e) {
+                                    e.printStackTrace();
+                                    logger.severe("Error updating download popup: " + e.getMessage());
+                                }
+                            }
+
+                            if ("state".equals(evt.getPropertyName())
+                                    && evt.getNewValue() == javax.swing.SwingWorker.StateValue.DONE) {
+                                try {
+                                    worker.get();
+                                    downloadp.jbutton1ChangeVisiblity(true);
+                                    downloadp.dispose();
+                                } catch (Exception ex) {
+                                    downloadp.dispose();
+
+                                    if (errorShown.compareAndSet(false, true)) {
+                                        ErrorFrame errFrame = new ErrorFrame("Error: Establishing Connection with Server", ErrorUtils.getErrorDetail(ex));
+                                        errFrame.setVisible(true);
+                                    }
                                 }
                             }
                         }

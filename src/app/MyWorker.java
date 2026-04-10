@@ -38,106 +38,156 @@ public class MyWorker extends SwingWorker<Object, Object> {
         folder = category;
         this.filename = filename;
     }
+    
+   /* @Override
+    protected Object doInBackground() throws Exception {
 
+        String location = outputFile.toString();
+        FTPClient ftp = null;
+        FileInputStream input = null;
+        OutputStream ftpOut = null;
+        OutputStream output = null;
+
+        try {
+            ftp = FtpConnectionManager.createConnection(host, user, pass);
+
+            System.out.println(outputFile.getName().toString());
+
+            File f1 = new File(location);
+            input = new FileInputStream(f1);
+
+            ftpOut = ftp.storeFileStream("/" + folder + "/" + filename);
+
+            if (ftpOut == null) {
+                throw new Exception("Unable to open FTP output stream for file: " + filename);
+            }
+
+            System.out.println(ftpOut.toString());
+
+            output = new BufferedOutputStream(ftpOut);
+            CopyStreamListener listener = new CopyStreamListener() {
+                public void bytesTransferred(final long totalBytesTransferred, final int bytesTransferred, final long streamSize) {
+                    setProgress((int) Math.round(((double) totalBytesTransferred / (double) streamSize) * 100d));
+                }
+
+                @Override
+                public void bytesTransferred(CopyStreamEvent arg0) {
+                }
+            };
+
+            Util.copyStream(input, output, ftp.getBufferSize(), outputFile.length(), listener);
+            output.flush();
+
+            return null;
+
+        } catch (java.net.ConnectException ce) {
+            ErrorFrame errFrame = new ErrorFrame("Error: Establishing Connection with Server");
+            errFrame.setVisible(true);
+            throw ce;
+        } catch (Exception ee) {
+            ErrorFrame errFrame = new ErrorFrame("Error: Establishing Connection with Server");
+            errFrame.setVisible(true);
+            throw ee;
+        } finally {
+            try {
+                if (output != null) {
+                    output.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (ftpOut != null) {
+                    ftpOut.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (input != null) {
+                    input.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            FtpConnectionManager.safeDisconnect(ftp);
+        }
+    }
+    
+    */
+    
+    
     @Override
     protected Object doInBackground() throws Exception {
-        
-        //File f = null;
 
-        // You're ignoring the host you past in to the constructor
         String location = outputFile.toString();
+        FTPClient ftp = null;
+        FileInputStream input = null;
+        OutputStream ftpOut = null;
+        OutputStream output = null;
 
-       /* try {
-        	ftpclient.connect(host, 21);
-        
-        }catch(java.net.ConnectException ce) {
-			ErrorFrame errFrame = new ErrorFrame("Error: Establishing Connection with Server");
-        	errFrame.setVisible(true);
-		}
-        
-        ftpclient.login(user, pass);    
-        ftpclient.setFileType(FTPClient.BINARY_FILE_TYPE);
-
-        ftpclient.setKeepAlive(true);
-        ftpclient.setControlKeepAliveTimeout(3000);
-        ftpclient.setDataTimeout(3000); // 100 minutes
-        ftpclient.setConnectTimeout(3000); // 100 minutes
-
-        int reply = ftpclient.getReplyCode();
-        System.out.println("Received Reply from FTP Connection:" + reply);
-
-        if (FTPReply.isPositiveCompletion(reply)) {
-            System.out.println("Connected Success");
-        }*/
-        
-        FTPClient ftp = new FTPClient();
-
-        ftp.setBufferSize(1024000);
-        int reply;
-        ftp.setControlEncoding("UTF-8");
         try {
-        	ftp.connect(host, 21);
-		}catch(java.net.ConnectException ce) {
-			ErrorFrame errFrame = new ErrorFrame("Error: Establishing Connection with Server");
-        	errFrame.setVisible(true);
-		}
+            ftp = FtpConnectionManager.createConnection(host, user, pass);
 
-        reply = ftp.getReplyCode();
-        if (FTPReply.isPositiveCompletion(reply)) {
-            System.out.println("Connected Success");
-        
-        } else if (!FTPReply.isPositiveCompletion(reply)) {
-        	ftp.disconnect();
+            System.out.println(outputFile.getName());
+
+            File f1 = new File(location);
+            input = new FileInputStream(f1);
+
+            ftpOut = ftp.storeFileStream("/" + folder + "/" + filename);
+
+            if (ftpOut == null) {
+                throw new Exception("Unable to open FTP output stream for file: " + filename);
+            }
+
+            System.out.println(ftpOut.toString());
+
+            output = new BufferedOutputStream(ftpOut);
+            CopyStreamListener listener = new CopyStreamListener() {
+                @Override
+                public void bytesTransferred(final long totalBytesTransferred, final int bytesTransferred, final long streamSize) {
+                    setProgress((int) Math.round(((double) totalBytesTransferred / (double) streamSize) * 100d));
+                }
+
+                @Override
+                public void bytesTransferred(CopyStreamEvent event) {
+                }
+            };
+
+            Util.copyStream(input, output, ftp.getBufferSize(), outputFile.length(), listener);
+            output.flush();
+
+            return null;
+
+        } finally {
             try {
-				throw new Exception("Exception in connecting to FTP Server");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+                if (output != null) {
+                    output.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (ftpOut != null) {
+                    ftpOut.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (input != null) {
+                    input.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            FtpConnectionManager.safeDisconnect(ftp);
         }
-        
-        ftp.login(user, pass);
-        ftp.setFileType(FTP.BINARY_FILE_TYPE);
-
-        if(host.equals("10.0.0.91"))
-        	ftp.enterLocalPassiveMode();
-        
-        ftp.setKeepAlive(true);
-        ftp.setControlKeepAliveTimeout(3000);
-        ftp.setDataTimeout(3000); // 100 minutes
-        ftp.setConnectTimeout(3000); // 100 minutes
-        
-        ftp.changeWorkingDirectory("/");
-        
-        System.out.println(outputFile.getName().toString());
-
-        File f1 = new File(location);
-        FileInputStream input = new FileInputStream(f1);
-        // ftp.storeFile(f.getName().toString(),in);
-
-        //ProgressMonitorInputStream is= new ProgressMonitorInputStream(getParent(), "st", in);
-        //OutputStream ftpOut = ftpclient.storeFileStream(outputFile.getName().toString());
-        OutputStream ftpOut = ftp.storeFileStream("/"+folder+"/"+filename);
-
-
-
-        System.out.println(ftpOut.toString());
-        //newname hereSystem.out.println(ftp.remoteRetrieve(f.toString()));
-        OutputStream output = new BufferedOutputStream(ftpOut);
-        CopyStreamListener listener = new CopyStreamListener() {
-            public void bytesTransferred(final long totalBytesTransferred, final int bytesTransferred, final long streamSize) {
-
-                setProgress((int) Math.round(((double) totalBytesTransferred / (double) streamSize) * 100d));
-
-            }
-
-            @Override
-            public void bytesTransferred(CopyStreamEvent arg0) {
-            }
-        };
-
-        Util.copyStream(input, output, ftp.getBufferSize(), outputFile.length(), listener);
-        ftpOut.close();
-        return null;
-
     }
 }
