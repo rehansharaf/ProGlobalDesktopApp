@@ -271,67 +271,82 @@ public class DownloadFrame extends javax.swing.JDialog {
         f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int r = f.showSaveDialog(null);
 
-        if (r == JFileChooser.APPROVE_OPTION) {
-            System.out.println(f.getSelectedFile());
-            File localDir = f.getSelectedFile();
+        if (r != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
 
-            final AtomicBoolean errorShown = new AtomicBoolean(false);
+        File localDir = f.getSelectedFile();
+        if (filename == null || filename.isEmpty()) {
+            return;
+        }
 
-            for (int i = 0; i < filename.size(); i++) {
-                try {
-                    final DownloadPopup downloadp = new DownloadPopup();
-                    downloadp.setVisible(true);
+        final AtomicBoolean errorShown = new AtomicBoolean(false);
+        final DownloadPopup downloadp = new DownloadPopup();
+        downloadp.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        downloadp.jbutton1ChangeVisiblity(false);
+        downloadp.progressBarVal(0);
+        downloadp.setStatusText("Starting download...");
+        downloadp.setVisible(true);
 
-                    final DownloadWorker worker = new DownloadWorker(
-                            host, user, pass, new File(filename.get(i)), service, localDir
+        startNextDownload(filename, localDir, 0, downloadp, errorShown);
+    }
+
+    private void startNextDownload(
+            final ArrayList<String> filenames,
+            final File localDir,
+            final int index,
+            final DownloadPopup downloadp,
+            final AtomicBoolean errorShown) {
+
+    	if (index >= filenames.size()) {
+    	    downloadp.progressBarVal(100);
+    	    downloadp.setStatusText("Download completed successfully.");
+    	    javax.swing.Timer timer = new javax.swing.Timer(200, e -> downloadp.dispose());
+    	    timer.setRepeats(false);
+    	    timer.start();
+    	    return;
+    	}
+
+        final String currentName = filenames.get(index);
+        downloadp.setStatusText("Downloading " + (index + 1) + " of " + filenames.size() + ": " + currentName);
+
+        final DownloadWorker worker = new DownloadWorker(
+                host, user, pass, new File(currentName), service, localDir
+        );
+
+        worker.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+
+                if ("progress".equals(evt.getPropertyName())) {
+                    int fileProgress = (Integer) evt.getNewValue();
+                    int cumulativeProgress = (int) Math.round(
+                            ((index * 100.0) + fileProgress) / filenames.size()
                     );
+                    downloadp.progressBarVal(cumulativeProgress);
+                }
 
-                    worker.addPropertyChangeListener(new PropertyChangeListener() {
-                        @Override
-                        public void propertyChange(PropertyChangeEvent evt) {
+                if ("state".equals(evt.getPropertyName())
+                        && evt.getNewValue() == javax.swing.SwingWorker.StateValue.DONE) {
+                    try {
+                        worker.get();
+                        startNextDownload(filenames, localDir, index + 1, downloadp, errorShown);
+                    } catch (Exception ex) {
+                        downloadp.dispose();
 
-                            if ("progress".equals(evt.getPropertyName())) {
-                                downloadp.jbutton1ChangeVisiblity(false);
-                                downloadp.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-                                Integer progress = (Integer) evt.getNewValue();
-
-                                try {
-                                    downloadp.progressBarVal(progress);
-                                } catch (MalformedURLException e) {
-                                    e.printStackTrace();
-                                    logger.severe("Error updating download popup: " + e.getMessage());
-                                }
-                            }
-
-                            if ("state".equals(evt.getPropertyName())
-                                    && evt.getNewValue() == javax.swing.SwingWorker.StateValue.DONE) {
-                                try {
-                                    worker.get();
-                                    downloadp.jbutton1ChangeVisiblity(true);
-                                    downloadp.dispose();
-                                } catch (Exception ex) {
-                                    downloadp.dispose();
-
-                                    if (errorShown.compareAndSet(false, true)) {
-                                        ErrorFrame errFrame = new ErrorFrame("Error: Establishing Connection with Server", ErrorUtils.getErrorDetail(ex));
-                                        errFrame.setVisible(true);
-                                    }
-                                }
-                            }
+                        if (errorShown.compareAndSet(false, true)) {
+                            ErrorFrame errFrame = new ErrorFrame(
+                                    "Error: Establishing Connection with Server",
+                                    ErrorUtils.getErrorDetail(ex)
+                            );
+                            errFrame.setVisible(true);
                         }
-                    });
-
-                    worker.execute();
-
-                } catch (MalformedURLException ex) {
-                    ex.printStackTrace();
-                    logger.severe("MalformedURLException while downloading file: " + ex.getMessage());
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                    logger.severe("InterruptedException while downloading file: " + e1.getMessage());
+                    }
                 }
             }
-        }
+        });
+
+        worker.execute();
     }
 
     public void getAllFiles() throws IOException {

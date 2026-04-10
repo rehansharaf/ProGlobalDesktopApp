@@ -89,7 +89,7 @@ public class MainUI extends javax.swing.JFrame {
      * Creates new form MainUI
      */
 	
-	private boolean isAdmin = true;
+	private boolean isAdmin = false;
 	private String appVersion = "1.0";
 	
 	private String host = "10.0.0.91";
@@ -4946,69 +4946,92 @@ public class MainUI extends javax.swing.JFrame {
 	}
 
 	public void uploadFile(String com, String service) throws IOException, InterruptedException {
-	    
-	    String filename;
-	    if ("Upload".equalsIgnoreCase(com)) {
 
-	        JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-	        j.setMultiSelectionEnabled(true);
-	        
-	        //FileNameExtensionFilter filter = new FileNameExtensionFilter("XLS files", "xls");
-	        //j.setFileFilter(filter);
-	        int r = j.showOpenDialog(null);
+	    if (!"Upload".equalsIgnoreCase(com)) {
+	        return;
+	    }
 
-	        if (r == JFileChooser.APPROVE_OPTION) {
+	    JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+	    j.setMultiSelectionEnabled(true);
 
-	            File[] files = j.getSelectedFiles();
-	            final AtomicBoolean errorShown = new AtomicBoolean(false);
+	    int r = j.showOpenDialog(null);
 
-	            for (int i = 0; i < files.length; i++) {
+	    if (r != JFileChooser.APPROVE_OPTION) {
+	        return;
+	    }
 
-	                filename = files[i].getName();
-	                final UploadJFrame uploadJ = new UploadJFrame();
-	                uploadJ.setVisible(true);
+	    final File[] files = j.getSelectedFiles();
+	    if (files == null || files.length == 0) {
+	        return;
+	    }
 
-	                final MyWorker worker = new MyWorker(host, user, pass, new File(files[i].getAbsolutePath()), service, filename);
+	    final AtomicBoolean errorShown = new AtomicBoolean(false);
+	    final UploadJFrame uploadJ = new UploadJFrame();
+	    uploadJ.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+	    uploadJ.jbutton1ChangeVisiblity(false);
+	    uploadJ.progressBarVal(0);
+	    uploadJ.setStatusText("Starting upload...");
+	    uploadJ.setVisible(true);
 
-	                worker.addPropertyChangeListener(new PropertyChangeListener() {
+	    startNextUpload(files, service, 0, uploadJ, errorShown);
+	}
 
-	                    @Override
-	                    public void propertyChange(PropertyChangeEvent evt) {
+	private void startNextUpload(
+	        final File[] files,
+	        final String service,
+	        final int index,
+	        final UploadJFrame uploadJ,
+	        final AtomicBoolean errorShown) {
 
-	                        if ("progress".equals(evt.getPropertyName())) {
-	                            uploadJ.jbutton1ChangeVisiblity(false);
-	                            uploadJ.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+		if (index >= files.length) {
+		    uploadJ.progressBarVal(100);
+		    uploadJ.setStatusText("Upload completed successfully.");
+		    javax.swing.Timer timer = new javax.swing.Timer(200, e -> uploadJ.dispose());
+		    timer.setRepeats(false);
+		    timer.start();
+		    return;
+		}
 
-	                            Integer progress = (Integer) evt.getNewValue();
-	                            try {
-	                                uploadJ.progressBarVal(progress);
-	                            } catch (MalformedURLException e) {
-	                                e.printStackTrace();
-	                            }
-	                        }
+	    final File currentFile = files[index];
+	    final String filename = currentFile.getName();
 
-	                        if ("state".equals(evt.getPropertyName())
-	                                && evt.getNewValue() == javax.swing.SwingWorker.StateValue.DONE) {
-	                            try {
-	                                worker.get();
-	                                uploadJ.jbutton1ChangeVisiblity(true);
-	                                uploadJ.dispose();
-	                            } catch (Exception ex) {
-	                                uploadJ.dispose();
+	    uploadJ.setStatusText("Uploading " + (index + 1) + " of " + files.length + ": " + filename);
 
-	                                if (errorShown.compareAndSet(false, true)) {
-	                                    ErrorFrame errFrame = new ErrorFrame("Error: Establishing Connection with Server", ErrorUtils.getErrorDetail(ex));
-	                                    errFrame.setVisible(true);
-	                                }
-	                            }
-	                        }
+	    final MyWorker worker = new MyWorker(host, user, pass, currentFile, service, filename);
+
+	    worker.addPropertyChangeListener(new PropertyChangeListener() {
+	        @Override
+	        public void propertyChange(PropertyChangeEvent evt) {
+
+	            if ("progress".equals(evt.getPropertyName())) {
+	                int fileProgress = (Integer) evt.getNewValue();
+	                int cumulativeProgress = (int) Math.round(
+	                        ((index * 100.0) + fileProgress) / files.length
+	                );
+	                uploadJ.progressBarVal(cumulativeProgress);
+	            }
+
+	            if ("state".equals(evt.getPropertyName())
+	                    && evt.getNewValue() == javax.swing.SwingWorker.StateValue.DONE) {
+	                try {
+	                    worker.get();
+	                    startNextUpload(files, service, index + 1, uploadJ, errorShown);
+	                } catch (Exception ex) {
+	                    uploadJ.dispose();
+
+	                    if (errorShown.compareAndSet(false, true)) {
+	                        ErrorFrame errFrame = new ErrorFrame(
+	                                "Error: Establishing Connection with Server",
+	                                ErrorUtils.getErrorDetail(ex)
+	                        );
+	                        errFrame.setVisible(true);
 	                    }
-	                });
-
-	                worker.execute();
+	                }
 	            }
 	        }
-	    }
+	    });
+
+	    worker.execute();
 	}
 	
     //This is for injuredWorker Upload Button
