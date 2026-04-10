@@ -89,8 +89,8 @@ public class MainUI extends javax.swing.JFrame {
      * Creates new form MainUI
      */
 	
-	private boolean isAdmin = false;
-	
+	private boolean isAdmin = true;
+	private String appVersion = "1.0";
 	
 	private String host = "10.0.0.91";
 	//private String host = "182.184.111.111";
@@ -124,8 +124,12 @@ public class MainUI extends javax.swing.JFrame {
     	this.setIconImages(icons);
 
     	jLabel1 = new javax.swing.JLabel();
-    	lblVersion = new javax.swing.JLabel(); 
+    	lblVersion = new javax.swing.JLabel();
+    	lblAccessLevel = new javax.swing.JLabel();
     	lblVersion.setFont(new Font("Tahoma", Font.BOLD, 11));
+    	lblVersion.setHorizontalAlignment(SwingConstants.RIGHT);
+    	lblAccessLevel.setFont(new Font("Tahoma", Font.BOLD, 11));
+    	lblAccessLevel.setHorizontalAlignment(SwingConstants.RIGHT);
         jScrollPane1 = new javax.swing.JScrollPane();
         
         jScrollPane1.setAutoscrolls(true);
@@ -179,6 +183,8 @@ public class MainUI extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel1.setText("Automation Services");
+        lblAccessLevel.setText("Access Level: " + (isAdmin ? "Admin" : "User"));
+        lblVersion.setText("Version: " + appVersion);
 
         serviceSearchField.setText("Search service...");
         serviceSearchField.setForeground(java.awt.Color.GRAY);
@@ -3852,33 +3858,36 @@ public class MainUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
         	layout.createParallelGroup(Alignment.TRAILING)
         		.addGroup(layout.createSequentialGroup()
-        			.addContainerGap()
-        			.addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, 749, Short.MAX_VALUE)
-        			.addGap(42))
+        			.addGap(25)
+        			.addGap(210)
+        			.addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
+        				.addComponent(lblAccessLevel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        				.addComponent(lblVersion, GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE))
+        			.addGap(26))
         		.addGroup(layout.createSequentialGroup()
-        			.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+        			.addGap(25)
+        			.addGroup(layout.createParallelGroup(Alignment.LEADING)
         				.addGroup(layout.createSequentialGroup()
-        					.addContainerGap(657, Short.MAX_VALUE)
-        					.addComponent(lblVersion, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE))
-        				.addGroup(layout.createSequentialGroup()
-        					.addGap(25)
-        					.addGroup(layout.createParallelGroup(Alignment.LEADING)
-        						.addGroup(layout.createSequentialGroup()
-        							.addComponent(serviceSearchField, GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
-        							.addPreferredGap(ComponentPlacement.RELATED)
-        							.addComponent(btnFindService, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-        							.addPreferredGap(ComponentPlacement.RELATED)
-        							.addComponent(btnClearServiceSearch, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
-        						.addComponent(jScrollPane1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 750, Short.MAX_VALUE))))
+        					.addComponent(serviceSearchField, GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addComponent(btnFindService, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addComponent(btnClearServiceSearch, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
+        				.addComponent(jScrollPane1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 750, Short.MAX_VALUE))
         			.addGap(26))
         );
         layout.setVerticalGroup(
         	layout.createParallelGroup(Alignment.LEADING)
         		.addGroup(layout.createSequentialGroup()
         			.addContainerGap()
-        			.addComponent(jLabel1)
-        			.addPreferredGap(ComponentPlacement.RELATED)
-        			.addComponent(lblVersion)
+        			.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        				.addComponent(jLabel1)
+        				.addGroup(layout.createSequentialGroup()
+        					.addComponent(lblAccessLevel)
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addComponent(lblVersion)))
         			.addGap(12)
         			.addGroup(layout.createParallelGroup(Alignment.BASELINE)
         				.addComponent(serviceSearchField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -5497,6 +5506,7 @@ public class MainUI extends javax.swing.JFrame {
     private JButton btnFaxReceiptSamp;
     private JButton btnFaxReceiptDesc;
     private JLabel lblVersion;
+    private JLabel lblAccessLevel;
     private JLabel lblMedflowdocuploadkhi;
     private JButton btnMedflowDocUpload_KHI_1_Upload;
     private JButton btnMedflowDocUpload_KHI_1_Down;
