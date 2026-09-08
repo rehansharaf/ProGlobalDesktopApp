@@ -89,7 +89,7 @@ public class MainUI extends javax.swing.JFrame {
      * Creates new form MainUI
      */
 	
-	private boolean isAdmin = false;
+	private boolean isAdmin = true;
 	private String appVersion = "1.0";
 	
 	private String host = "10.0.0.91";
@@ -505,8 +505,13 @@ public class MainUI extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jPanel2);
         //jPanel2.setLayout(new MigLayout("", "[208px,grow][65px,grow][79px,grow][72px,grow][70px,grow][85px,grow][70px:n,grow]", "[][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][25.00px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][23px][][23px][23px][23px][23px][23px][23px]"));
         String serviceColumns = "[220px,grow,fill][95px,grow,fill][115px,grow,fill][95px,grow,fill][120px,grow,fill][105px,grow,fill][100px,grow,fill]";
-        jPanel2.setLayout(new MigLayout("hidemode 3, insets 0, gap 8 6, fillx", "[220px,grow,fill][95px,grow,fill][115px,grow,fill][95px,grow,fill][120px,grow,fill][105px,grow,fill][100px,grow,fill]", "[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]"));
-
+        //jPanel2.setLayout(new MigLayout("hidemode 3, insets 0, gap 8 0, fillx", "[220px,grow,fill][95px,grow,fill][115px,grow,fill][95px,grow,fill][120px,grow,fill][105px,grow,fill][100px,grow,fill]", "[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]"));
+        jPanel2.setLayout(new MigLayout(
+        	    "hidemode 3, insets 0, gap 8 6, fillx",
+        	    "[220px,grow,fill][95px,grow,fill][115px,grow,fill][95px,grow,fill][120px,grow,fill][105px,grow,fill][100px,grow,fill]",
+        	    ""
+        	));
+        
         label = new JLabel();
         label.setText("Service Name");
         label.setFont(new Font("Tahoma", Font.BOLD, 11));
