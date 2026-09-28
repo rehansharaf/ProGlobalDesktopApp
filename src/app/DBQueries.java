@@ -1763,4 +1763,71 @@ public class DBQueries extends javax.swing.JDialog {
 
 	
 	}
+
+	public String getDetailsConexem_Docupace_DocUpload(String serviceType) throws SQLException {
+		
+		String responseText;
+
+		mySt1 = myCon.createStatement();
+		myQuery1 = "select count(*) as count from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'ConexemDocupace_Upload' ;";
+		myPst = myCon.prepareStatement(myQuery1);
+		rs1 = myPst.executeQuery();
+		rs1.next();
+
+		int resizePDFCount = rs1.getInt("count");
+
+		if (resizePDFCount == 0) {
+
+			closeDBConnection();
+			return "Currently No File is Processing";
+
+		}else {
+			
+			mySt1 = myCon.createStatement();
+			myQuery1 = "select ID, ADJCounts , RequestFilename from SkypeCDRBackLog.edexcrawler where Status is null and ServiceName = 'ConexemDocupace_Upload' ;";
+			myPst = myCon.prepareStatement(myQuery1);
+			rs1 = myPst.executeQuery();
+			rs1.next();
+
+			int fileid = rs1.getInt("ID");
+			int totalCount = rs1.getInt("ADJCounts");
+			String requestFilename = rs1.getString("RequestFilename");
+			
+
+			int conexemCount = 0;
+			int docupaceCount = 0;
+
+			String sql =
+			    "SELECT " +
+			    "SUM(CASE WHEN portal = 'conexem' THEN 1 ELSE 0 END) AS conexem_count, " +
+			    "SUM(CASE WHEN portal = 'docupace' THEN 1 ELSE 0 END) AS docupace_count " +
+			    "FROM SkypeCDRBackLog.conexem_docupace_upload " +
+			    "WHERE fileid = ?";
+
+			try (PreparedStatement ps = myCon.prepareStatement(sql)) {
+
+			    ps.setInt(1, fileid);
+
+			    try (ResultSet rs = ps.executeQuery()) {
+
+			        if (rs.next()) {
+			            conexemCount = rs.getInt("conexem_count");
+			            docupaceCount = rs.getInt("docupace_count");
+			        }
+			    }
+			}
+			
+
+			System.out.println("Conexem Count: " + conexemCount);
+			System.out.println("Docupace Count: " + docupaceCount);
+
+			responseText = "Filename " + requestFilename + " Have Total Records " + totalCount
+					+ " & Processed Records Count For Conexem Is " + conexemCount + " & For Docupace Is "+docupaceCount;
+			
+			closeDBConnection();
+			return responseText;
+			
+		}
+		
+	}
 }

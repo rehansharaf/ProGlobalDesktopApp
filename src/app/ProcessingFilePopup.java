@@ -320,6 +320,9 @@ public class ProcessingFilePopup extends javax.swing.JDialog {
 	    	}else if(serviceType.equals("Claim_Validation_DD")) {
 	    		String filename = dbquery.getDetailsClaimValidation_DD(serviceType);
 		    	jTextPane1.setText(filename);
+	    	}else if(serviceType.equals("Conexem_Docupace_DocUpload")) {
+	    		String filename = dbquery.getDetailsConexem_Docupace_DocUpload(serviceType);
+		    	jTextPane1.setText(filename);
 	    	}
 	
 	    	
